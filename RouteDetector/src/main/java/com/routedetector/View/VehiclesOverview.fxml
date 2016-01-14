@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.routedetector.View.VehicleOverviewController">
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" prefHeight="32.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="newButton" mnemonicParsing="false" onAction="#handleNewVehicle" text="New...">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEditVehicle" text="View/Edit">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDeleteVehicle" text="Remove vehicle">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </HBox>
+   </bottom>
+   <center>
+      <TableView fx:id="vehicleTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="79.0" prefWidth="830.0" BorderPane.alignment="CENTER">
+         <columns>
+            <TableColumn fx:id="licenseColumn" prefWidth="75.0" text="License plate" />
+            <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Type" />
+            <TableColumn fx:id="driverColumn" prefWidth="75.0" text="Driver" />
+            <TableColumn fx:id="manufacturerColumn" prefWidth="75.0" text="Manufacturer" />
+            <TableColumn fx:id="modelColumn" prefWidth="75.0" text="Model" />
+            <TableColumn fx:id="trackingIdColumn" prefWidth="75.0" text="Gprs IMEI" />
+            <TableColumn fx:id="countryColumn" prefWidth="75.0" text="Country" />
+            <TableColumn fx:id="continentColumn" prefWidth="75.0" text="Continent" />
+            <TableColumn fx:id="ownershipColumn" prefWidth="75.0" text="Ownership" />
+            <TableColumn fx:id="departmentColumn" prefWidth="75.0" text="Department" />
+         </columns>
+      </TableView>
+   </center>
+   <top>
+      <HBox fx:id="topBox" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0" spacing="5.0" BorderPane.alignment="CENTER">
+         <styleClass>
+            <String fx:value="background" />
+            <String fx:value="title-height" />
+         </styleClass>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="2.0" left="5.0" top="2.0" />
+         </padding>
+      </HBox>
+   </top>
+</BorderPane>

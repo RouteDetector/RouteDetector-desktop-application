@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.routedetector.View.DriverOverviewController">
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" prefHeight="34.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="newButton" mnemonicParsing="false" onAction="#handleNewDriver" text="New...">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEditDriver" text="View/Edit">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDeleteDriver" text="Remove driver">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </HBox>
+   </bottom>
+   <center>
+      <TableView fx:id="driverTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="79.0" prefWidth="830.0" stylesheets="" BorderPane.alignment="CENTER">
+         <columns>
+            <TableColumn fx:id="nameColumn" prefWidth="68.0" text="Name" />
+            <TableColumn fx:id="vehicleLicenseColumn" prefWidth="74.0" text="Vehicle" />
+            <TableColumn fx:id="tachographColumn" prefWidth="209.0" text="Tachograph driver card number" />
+            <TableColumn fx:id="mobilePhoneColumn" prefWidth="158.0" text="Mobile phone number" />
+            <TableColumn fx:id="departmentColumn" prefWidth="90.0" text="Department" />
+            <TableColumn fx:id="driverLicenceColumn" prefWidth="75.0" text="Driver licence" />
+            <TableColumn fx:id="classesColumn" prefWidth="75.0" text="Classes" />
+         </columns>
+      </TableView>
+   </center>
+   <top>
+      <HBox fx:id="topBox" alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="600.0" spacing="5.0" BorderPane.alignment="CENTER">
+         <styleClass>
+            <String fx:value="background" />
+            <String fx:value="title-height" />
+         </styleClass>
+         <padding>
+            <Insets bottom="2.0" left="5.0" top="2.0" />
+         </padding>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </HBox>
+   </top>
+</BorderPane>

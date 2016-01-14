@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="panel" prefHeight="362.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.routedetector.View.StatisticsOverviewController">
+   <top>
+      <HBox fx:id="topBox" prefHeight="20.0" prefWidth="600.0" spacing="5.0" BorderPane.alignment="CENTER">
+         <opaqueInsets>
+            <Insets left="5.0" />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets bottom="2.0" left="5.0" top="2.0" />
+         </BorderPane.margin>
+      </HBox>
+   </top>
+   <left>
+      <ScrollPane prefHeight="338.0" prefWidth="216.0" BorderPane.alignment="CENTER">
+         <content>
+            <VBox maxWidth="195.0" minWidth="195.0" prefHeight="48.0" prefWidth="195.0">
+               <children>
+                  <Label text="Available GPRS devices:" />
+                  <VBox fx:id="leftPanel" prefHeight="51.0" prefWidth="195.0" />
+               </children></VBox>
+         </content>
+      </ScrollPane>
+   </left>
+</BorderPane>

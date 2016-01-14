@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="596.0" prefWidth="576.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.routedetector.View.DriverEditController">
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" maxHeight="30.0" maxWidth="1.7976931348623157E308" minHeight="30.0" prefHeight="30.0" prefWidth="576.0" BorderPane.alignment="BOTTOM_RIGHT">
+         <children>
+            <RadioButton fx:id="editableButton" mnemonicParsing="false" text="Editable">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </RadioButton>
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSave" text="Save">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="Cancel">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+      <VBox prefHeight="590.0" prefWidth="612.0" styleClass="border-gray" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" maxHeight="50.0" maxWidth="1.7976931348623157E308" minHeight="50.0" prefHeight="50.0" text="Driver's information">
+               <padding>
+                  <Insets left="15.0" right="15.0" />
+               </padding>
+               <styleClass>
+                  <String fx:value="background" />
+                  <String fx:value="label-bright" />
+               </styleClass>
+            </Label>
+            <Label styleClass="label-nice" text="Basic informations">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <GridPane hgap="2.0" prefHeight="154.0" prefWidth="576.0">
+               <children>
+                  <HBox alignment="CENTER" maxHeight="30.0" prefHeight="30.0" prefWidth="282.0" GridPane.rowIndex="4">
+                     <children>
+                        <Button fx:id="loadButton" mnemonicParsing="false" onAction="#loadImage" styleClass="delete" stylesheets="" text="Load...">
+                           <tooltip>
+                              <Tooltip text="Remove picture" />
+                           </tooltip>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#removeImage" text="Remove">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <ImageView fx:id="imageView" fitHeight="115.0" fitWidth="186.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view" GridPane.rowSpan="4" />
+                  <Label text="Name:" GridPane.columnIndex="1" />
+                  <Label text="Current vehicle:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Mobile phone:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label text="Tachograph card:" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <tooltip>
+                        <Tooltip text="Tachograph driver card number." />
+                     </tooltip>
+                  </Label>
+                  <Label text="Email address:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="name" GridPane.columnIndex="2" />
+                  <Label fx:id="currentVehicle" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <TextField fx:id="mobilePhone" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <TextField fx:id="tachographNumber" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <TextField fx:id="email" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="200.0" prefWidth="200.0" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="100.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" prefWidth="150.0" />
+               </columnConstraints>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
+               <rowConstraints>
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+            <TabPane prefHeight="323.0" prefWidth="460.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                  <Tab text="Professional data">
+                     <content>
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="10.0" prefWidth="280.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="340.0" minWidth="10.0" prefWidth="296.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <VBox prefHeight="294.0" prefWidth="301.0">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="label-nice" text="Driving License">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <GridPane alignment="CENTER" hgap="2.0" prefHeight="91.0" prefWidth="460.0">
+                                       <children>
+                                          <Label text="Driver license number:" />
+                                          <Label text="Classes:" GridPane.rowIndex="1" />
+                                          <Label text="Expiry date:" GridPane.rowIndex="2" />
+                                          <TextField fx:id="driverLicense" GridPane.columnIndex="1" />
+                                          <TextField fx:id="classes" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <DatePicker fx:id="expiryDate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" minWidth="120.0" prefWidth="180.0" />
+                                          <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="180.0" minWidth="150.0" prefWidth="150.0" />
+                                       </columnConstraints>
+                                       <padding>
+                                          <Insets left="5.0" right="5.0" />
+                                       </padding>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="label-nice" text="Smart phone application credentials">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <GridPane alignment="CENTER" hgap="2.0" prefHeight="75.0" prefWidth="424.0">
+                                       <children>
+                                          <Label text="Username:" />
+                                          <Label text="Password:" GridPane.rowIndex="1" />
+                                          <TextField fx:id="username" GridPane.columnIndex="1" />
+                                          <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" minWidth="120.0" prefWidth="180.0" />
+                                          <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="180.0" minWidth="150.0" prefWidth="150.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <VBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </VBox.margin>
+                                    </GridPane>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="294.0" prefWidth="283.0" GridPane.columnIndex="1">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="label-nice" text="Professional data">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <GridPane alignment="CENTER" hgap="2.0" prefHeight="156.0" prefWidth="296.0">
+                                       <children>
+                                          <Label text="Employment date:" />
+                                          <Label text="Experience:" GridPane.rowIndex="3" />
+                                          <Label text="Contract type:" GridPane.rowIndex="1" />
+                                          <Label text="Department:" GridPane.rowIndex="2" />
+                                          <DatePicker fx:id="employmentDate" GridPane.columnIndex="1" />
+                                          <TextField fx:id="contractType" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <TextField fx:id="department" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <TextArea fx:id="experience" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2" />
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" minWidth="120.0" prefWidth="120.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="150.0" prefWidth="150.0" />
+                                       </columnConstraints>
+                                       <padding>
+                                          <Insets left="10.0" right="10.0" />
+                                       </padding>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </GridPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Personal data">
+                     <content>
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="label-nice" text="Personal data">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <GridPane alignment="CENTER" hgap="2.0">
+                                       <children>
+                                          <Label text="ID number:" />
+                                          <Label text="Full name:" GridPane.rowIndex="1" />
+                                          <Label text="Date of birth:" GridPane.rowIndex="2" />
+                                          <Label text="Address:" GridPane.rowIndex="3" />
+                                          <TextField fx:id="idNumber" GridPane.columnIndex="1" />
+                                          <TextField fx:id="fullName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <DatePicker fx:id="dateOfBirth" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <TextArea fx:id="address" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2" />
+                                          <Label text="Post code:" GridPane.rowIndex="5" />
+                                          <TextField fx:id="postCode" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                          <Label text="Country:" GridPane.rowIndex="6" />
+                                          <TextField fx:id="country" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                          <Label text="City:" GridPane.rowIndex="7" />
+                                          <TextField fx:id="city" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                          <Label text="Marital status:" GridPane.rowIndex="8" />
+                                          <TextField fx:id="maritalStatus" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" minWidth="120.0" prefWidth="120.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="150.0" prefWidth="150.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <VBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </VBox.margin>
+                                    </GridPane>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="label-nice" text="Emergency">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <GridPane alignment="CENTER" hgap="2.0" prefHeight="76.0" prefWidth="423.0">
+                                       <children>
+                                          <Label text="Contact name:" />
+                                          <Label text="Contact phone num:" GridPane.rowIndex="1" />
+                                          <TextField fx:id="contactName" GridPane.columnIndex="1" />
+                                          <TextField fx:id="contactPhoneNumber" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" minWidth="120.0" prefWidth="120.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="150.0" prefWidth="150.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <VBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </VBox.margin>
+                                    </GridPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </GridPane>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

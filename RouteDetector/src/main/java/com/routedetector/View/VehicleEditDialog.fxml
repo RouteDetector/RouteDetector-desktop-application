@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxWidth="-Infinity" prefHeight="496.0" prefWidth="720.0" stylesheets="" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.routedetector.View.VehicleEditController">
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" maxHeight="30.0" maxWidth="1.7976931348623157E308" minHeight="30.0" prefHeight="30.0" prefWidth="902.0" BorderPane.alignment="BOTTOM_RIGHT">
+         <children>
+            <RadioButton fx:id="editableButton" mnemonicParsing="false" text="Editable">
+               <HBox.margin>
+                  <Insets bottom="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+            </RadioButton>
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSave" text="Save">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="Cancel">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+      <TabPane prefHeight="454.0" prefWidth="356.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+            <Tab text="Basic information">
+               <content>
+                  <VBox prefHeight="469.0" prefWidth="528.0">
+                     <children>
+                        <Label styleClass="label-nice" text="Description">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="20.0" right="2.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label styleClass="label-nice" text="Odometer, chronometer and costs">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <GridPane hgap="2.0" prefHeight="126.0" prefWidth="528.0">
+                           <children>
+                              <Label text="Cost per km (euro):" GridPane.rowIndex="3" />
+                              <Label text="Cost per hour (euro):" GridPane.rowIndex="2" />
+                              <Label text="Odometer (km)" />
+                              <Label text="Chronometer (h)" GridPane.rowIndex="1" />
+                              <TextField fx:id="odometer" GridPane.columnIndex="1" />
+                              <TextField fx:id="chronometer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="costPerHour" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="costPerKm" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" prefWidth="180.0" />
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="150.0" prefWidth="150.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <padding>
+                              <Insets left="5.0" right="5.0" />
+                           </padding>
+                        </GridPane>
+                        <GridPane fx:id="descriptions" hgap="2.0">
+                           <children>
+                              <Label text="Vehicle type:" />
+                              <Label text="Vehicle manufacturer:" GridPane.rowIndex="1" />
+                              <Label text="Vehicle model:" GridPane.rowIndex="2" />
+                              <Label text="Engine:" GridPane.rowIndex="3" />
+                              <Label text="Year:" GridPane.rowIndex="4" />
+                              <Label text="Acquisition date:" GridPane.rowIndex="5" />
+                              <ChoiceBox fx:id="vehicleType" prefWidth="150.0" GridPane.columnIndex="1" />
+                              <TextField fx:id="vehicleManufacturer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="vehicleModel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="engineType" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="yearOfMake" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <DatePicker fx:id="acquisitionDate" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" prefWidth="180.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" prefWidth="150.0" />
+                           </columnConstraints>
+                           <padding>
+                              <Insets left="5.0" right="5.0" />
+                           </padding>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </GridPane>
+                     </children>
+                     <styleClass>
+                        <String fx:value="background-white" />
+                        <String fx:value="border-gray" />
+                     </styleClass>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab text="Loading space">
+               <content>
+                  <VBox prefHeight="463.0" prefWidth="507.0">
+                     <children>
+                        <Label styleClass="label-nice" text="Capacity">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <GridPane hgap="2.0">
+                           <children>
+                              <Label text="Width (cm):" />
+                              <Label text="Height (cm):" GridPane.rowIndex="1" />
+                              <Label text="Lenght (cm):" GridPane.rowIndex="2" />
+                              <Label text="Pallet number:" GridPane.rowIndex="3" />
+                              <Label text="Payload weight (kg):" GridPane.rowIndex="4" />
+                              <Label text="Curb weght (kg):" GridPane.rowIndex="5" />
+                              <Label text="Gross weight (kg):" GridPane.rowIndex="6" />
+                              <TextField fx:id="width" GridPane.columnIndex="1" />
+                              <TextField fx:id="height" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="lenght" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="palletNumber" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="payloadWeight" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <TextField fx:id="curbWeight" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <TextField fx:id="grossWeight" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <CheckBox fx:id="doubleDeck" mnemonicParsing="false" text="Double deck" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" minWidth="10.0" prefWidth="180.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="10.0" prefWidth="180.0" />
+                           </columnConstraints>
+                           <padding>
+                              <Insets left="5.0" right="5.0" />
+                           </padding>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                     </children>
+                     <styleClass>
+                        <String fx:value="background-white" />
+                        <String fx:value="border_black" />
+                     </styleClass>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab text="Equipment and else...">
+               <content>
+                  <VBox prefHeight="436.0" prefWidth="507.0">
+                     <children>
+                        <Label styleClass="label-nice" text="Equipment">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <GridPane hgap="2.0">
+                           <children>
+                              <Label text="Securing straps (num):" />
+                              <Label text="Other equipment:" GridPane.rowIndex="1" />
+                              <TextField fx:id="numberOfSecuringStraps" GridPane.columnIndex="1" />
+                              <TextArea fx:id="otherEquipment" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2">
+                                 <GridPane.margin>
+                                    <Insets bottom="3.0" top="3.0" />
+                                 </GridPane.margin>
+                              </TextArea>
+                              <CheckBox fx:id="palletCarrier" mnemonicParsing="false" text="Pallet carrier" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <CheckBox fx:id="meetRail" mnemonicParsing="false" text="Meet rail" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <CheckBox fx:id="refrigerated" mnemonicParsing="false" text="Refrigerated" GridPane.rowIndex="3">
+                                 <GridPane.margin>
+                                    <Insets right="5.0" />
+                                 </GridPane.margin>
+                              </CheckBox>
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" prefWidth="180.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" prefWidth="180.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <padding>
+                              <Insets left="5.0" right="5.0" />
+                           </padding>
+                        </GridPane>
+                        <Label styleClass="label-nice" text="More info">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <GridPane hgap="2.0">
+                           <children>
+                              <Label text="Country:" />
+                              <Label text="Continent:" GridPane.rowIndex="1" />
+                              <Label text="Additional info field 1:" GridPane.rowIndex="3" />
+                              <Label text="Additional info field 2:" GridPane.rowIndex="5" />
+                              <Label text="Ownership:" GridPane.rowIndex="2" />
+                              <TextField fx:id="country" GridPane.columnIndex="1" />
+                              <TextField fx:id="continent" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="ownership" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextArea fx:id="moreInfoFieldOne" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2" />
+                              <TextArea fx:id="moreInfoFieldTwo" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.rowSpan="2" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" prefWidth="180.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" prefWidth="180.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <padding>
+                              <Insets left="5.0" right="5.0" />
+                           </padding>
+                        </GridPane>
+                     </children>
+                     <styleClass>
+                        <String fx:value="background-white" />
+                        <String fx:value="border_black" />
+                     </styleClass>
+                  </VBox>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+   <left>
+      <VBox prefHeight="470.0" prefWidth="358.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" maxHeight="50.0" maxWidth="1.7976931348623157E308" minHeight="50.0" prefHeight="50.0" text="Vehicle's information">
+               <styleClass>
+                  <String fx:value="background" />
+                  <String fx:value="label-bright" />
+               </styleClass>
+            </Label>
+            <Label styleClass="label-nice" text="Identification information">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="2.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <GridPane hgap="2.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" minWidth="10.0" prefWidth="180.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="License plate:" />
+                  <TextField fx:id="licPlate" GridPane.columnIndex="1" />
+                  <Label text="Engine number:" GridPane.rowIndex="1" />
+                  <TextField fx:id="engineNumber" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Gprs IMEI:" GridPane.rowIndex="2" />
+                  <TextField fx:id="trackingId" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               </children>
+               <VBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </VBox.margin>
+            </GridPane>
+            <Label styleClass="label-nice" text="Current associations">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <GridPane fx:id="currentAssociations" hgap="2.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" prefWidth="180.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" prefWidth="150.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Current driver:" />
+                  <Label text="Department:" GridPane.rowIndex="1" />
+                  <Label text="Current co-driver:" GridPane.rowIndex="2" />
+                  <TextField fx:id="currentDriver" GridPane.columnIndex="1" />
+                  <TextField fx:id="vehicleGroup" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="currentCoDriver" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
+            </GridPane>
+            <Label styleClass="label-nice" text="Fuel info">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <GridPane hgap="2.0">
+               <children>
+                  <Label text="Fuel (L/100 km):" GridPane.rowIndex="1" />
+                  <Label text="Fuel (L/hour):" GridPane.rowIndex="2" />
+                  <Label text="Fuel tank capacity (L):" GridPane.rowIndex="3" />
+                  <Label text="Fuel type" />
+                  <ChoiceBox fx:id="fuelType" prefHeight="25.0" prefWidth="160.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="literPer100Km" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="literPerHour" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="fuelTankCapacity" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="180.0" prefWidth="180.0" />
+                  <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="150.0" prefWidth="150.0" />
+               </columnConstraints>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
+               <rowConstraints>
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+         </children>
+         <styleClass>
+            <String fx:value="background-white" />
+            <String fx:value="border_black" />
+         </styleClass>
+      </VBox>
+   </left>
+</BorderPane>

@@ -1,0 +1,162 @@
+.progress-bar > .bar {
+    -fx-background-insets: 1 1 1 1;
+    -fx-padding:0.2em;
+}
+.progress-bar > .track {
+  -fx-text-box-border: darkblue;
+   -fx-background-color: white;
+}
+
+.button:pressed{
+    -fx-background-color: #1d1d1d;
+}
+
+.button:focused {
+    -fx-background-color:#87CEEB;
+}
+
+.button:disabled, .button:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.button:default:hover {
+    -fx-background-color:#6B6B6B;
+}
+.button {
+	-fx-background-color: #9a9a9a;
+    -fx-text-fill:white;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+.button:hover {
+    -fx-background-color: #6B6B6B;
+}
+.label-bright{
+    -fx-font-size: 15pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-alignment: center-left;
+    -fx-opacity: 1;
+    -fx-padding:10 10 10 10;
+    }
+.background{
+    }
+.title-height{
+	-fx-pref-height:15px;
+}
+.label-bright-small{
+    -fx-font-size: 9pt;
+    -fx-alignment: center-left;
+    -fx-opacity: 1;
+ }
+.label-bright-medium{
+    -fx-font-size: 11pt;
+    -fx-alignment: center-left;
+    -fx-opacity: 1;
+ }
+.border-line{
+ 	-fx-border-style:solid;
+ 	-fx-border-color:#E5E5E5;
+ }
+.border-gray{
+ 	-fx-border-style:solid;
+ 	-fx-border-width:2px;
+ 	-fx-border-color:#87CEEB;
+ }
+.label-nice{
+    -fx-font-size: 9pt;
+    -fx-font-style: italic;
+}
+.label{
+    -fx-font-family: "Segoe UI Light";
+}
+.image-view{
+    -fx-background-color:#87CEEB;	
+}
+.reload-button {
+    -fx-graphic: url('/resources/reload.png');
+}
+.reload-button:hover{
+	-fx-background-color:yellow;
+}
+.reload-button:focused:hover{
+	-fx-background-color:yellow;
+}
+.reload-button:focused {
+    -fx-background-color:yellow;
+}
+.last-positions-button {
+    -fx-graphic: url('/resources/last-positions.png');
+	-fx-background-color:transparent;
+}
+.last-positions-button:hover{
+	-fx-background-color:yellow;
+}
+.last-positions-button:focused:hover{
+	-fx-background-color:yellow;
+}
+.last-positions-button:selected {
+	-fx-background-color:#87CEEB;
+}
+.last-positions-button:pressed{
+}
+.last-positions-button:focused {
+}
+.marker-button {
+    -fx-graphic: url('/resources/marker.png');
+	-fx-background-color:transparent;
+}
+.marker-button:hover{
+	-fx-background-color:yellow;
+}
+.marker-button:focused:hover{
+	-fx-background-color:yellow;
+}
+.marker-button:pressed{
+}
+.marker-button:focused {
+}
+.marker-button:selected {
+	-fx-background-color:#87CEEB;
+}
+.histogram-button {
+    -fx-graphic: url('/resources/histogram.png');
+	-fx-background-color:transparent;
+}
+.histogram-button:hover{
+	-fx-background-color:yellow;
+}
+.histogram-button:focused:hover{
+	-fx-background-color:yellow;
+}
+.histogram-button:pressed{
+	-fx-background-color:yellow;
+}
+.histogram-button:focused {
+    -fx-background-color:yellow;
+}
+.warning{
+    -fx-graphic: url('/resources/alert.png');
+}
+.warning:hover{
+	-fx-background-color:yellow;
+}
+.warning:focused:hover{
+	-fx-background-color:yellow;
+}
+.transparent{
+	-fx-background-color:transparent;
+}
+.transparent:pressed{
+	-fx-background-color:transparent;
+}
+.transport:focused{
+	-fx-background-color:transparent;
+}
+.picture-button{
+	-fx-min-width: 16px;
+    -fx-min-height: 16px;
+    -fx-max-width: 16px;
+    -fx-max-height: 16px;	
+}
