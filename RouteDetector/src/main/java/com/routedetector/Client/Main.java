@@ -92,6 +92,7 @@ public class Main extends Application implements ConnectionStateHolder{
 	private DriverOverviewController driverOverviewController;
 	private VehicleOverviewController vehicleOverviewController;
 	private GprsDevicesOverviewController gprsDevicesController;
+	private MapPaneController mapPaneController;
 	
 	/** List of Gprs device imeis which positions are added on map pane*/
 	private ObservableList<String> observedGprsDevicesImeiList= FXCollections.observableArrayList();
@@ -132,7 +133,7 @@ public class Main extends Application implements ConnectionStateHolder{
 		
 		//Initialize initStage
 		try{
-			this.initMainWindow();
+			initMainWindow();
 		} catch (IOException e) {
 			StaticJobs.showExceptionAlert(e, splashStage);
 		}
@@ -165,6 +166,7 @@ public class Main extends Application implements ConnectionStateHolder{
 		this.driverOverviewController.reloadTableOnRunLater();
 		this.vehicleOverviewController.reloadTableOnRunLater();
 		this.gprsDevicesController.reloadTableOnRunLater();
+		this.mapPaneController.reloadMapCanvas();
 		initStage.show();
 	}
 	/** Method for initializing initStage after successful sign in.
@@ -212,7 +214,7 @@ public class Main extends Application implements ConnectionStateHolder{
 	  	FXMLLoader thirdLoader = new FXMLLoader();  
 	    thirdLoader.setLocation(LoginController.class.getResource("MapPane.fxml"));
 	    BorderPane mapPane = (BorderPane) thirdLoader.load();
-	    MapPaneController mapPaneController = thirdLoader.getController();
+	    mapPaneController = thirdLoader.getController();
 	    mapPaneController.setRmiContainer(rmiContainer);    
 	    mapPaneController.setMotherWindow(initStage);
 	    mapPaneController.setStatusBar(statusBar);
@@ -330,7 +332,6 @@ public class Main extends Application implements ConnectionStateHolder{
 	    rmiContainer.setVehicleTab(mainContainerController.getVehicleTab());
 	    rmiContainer.setGprsTab(mainContainerController.getGprsTab());
 	
-	    //show main stage
 	    Scene scene = new Scene(mainContainerPane);
 		mainContainerPane.getStylesheets().add("/resources/style.css");
 	    initStage.setScene(scene);
@@ -423,7 +424,7 @@ public class Main extends Application implements ConnectionStateHolder{
 	  			    	    in.close();
 	  			    	    System.setProperties(prop);
 	  			    	    
-	  			    	    //System.setProperty("javax.net.ssl.keyStore","D:/ostava/properties/keystore.jks");
+	  			    	    //System.setProperty("javax.net.ssl.keyStore","D:/ostava/properties/keystore");
 	  			      	    //System.setProperty("javax.net.ssl.trustStore","D:/ostava/properties/cacerts");
 	  			    	    //System.setProperty("java.security.policy", "D:/ostava/properties/security.properties");
 	
@@ -432,7 +433,7 @@ public class Main extends Application implements ConnectionStateHolder{
 	  			    	    //System.setProperty("java.security.policy", "./properties/security.properties");
 	  			    	    
 	  			    	    //Enable RC4 algorithm (by excluding it from disabled ones)
-	  			    	    java.security.Security.setProperty("jdk.tls.disabledAlgorithms","SSLv3, DH keySize < 768");
+	  			    	    //java.security.Security.setProperty("jdk.tls.disabledAlgorithms","SSLv3, DH keySize < 768");
 	  			    	    prop=null;
 						}catch (IOException e) {
 							e.printStackTrace();
@@ -453,7 +454,8 @@ public class Main extends Application implements ConnectionStateHolder{
 								}
 							}
 						}
-						Registry registry = LocateRegistry.getRegistry(serverAddress, portRmi, new SslRMIClientSocketFactory());
+			            Registry registry = LocateRegistry.getRegistry(
+			            		serverAddress, portRmi);
 
 						loginObject = (SecurityLoginInterface) registry.lookup(loginObjectBindingName);
 						showLoginStageRunLater();
@@ -482,7 +484,7 @@ public class Main extends Application implements ConnectionStateHolder{
 				}
 			});
 		}
-		/** Initializes main window, show login stage on main thread and hides splash window. */
+		/** Shows login stage on main thread and hides splash window. */
 		private void showLoginStageRunLater(){
 			Platform.runLater(new Runnable() {
 				@Override

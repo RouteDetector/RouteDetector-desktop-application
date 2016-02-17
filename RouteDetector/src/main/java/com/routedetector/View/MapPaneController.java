@@ -104,29 +104,34 @@ public class MapPaneController implements MapCanvas{
 	 * Loads html content into WebView.
 	 */
 	public void loadMapView(){
-	    webView = new WebView();
-	    webEngine = webView.getEngine();
- 	    //webEngine.load(getClass().getResource("/map_resources/googlemap.html").toString());
-	    File f=new File("./map_resources/googlemap.html");
- 	    try {
+		reloadMapCanvas();
+	    reloadVehicleBoxes();
+	}
+
+	public void reloadMapCanvas(){
+		webView = new WebView();
+		webEngine = webView.getEngine();
+	    //webEngine.load(getClass().getResource("/map_resources/googlemap.html").toString());
+	    
+		File f=new File("./map_resources/googlemap.html");
+		try {
 			webEngine.load(new URL("file:///" + f.getAbsolutePath()).toExternalForm());
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			StaticJobs.showExceptionAlert(e, null);
 		}
-        // process page loading
-       webEngine.getLoadWorker().stateProperty().addListener(
-           (ObservableValue<? extends State> ov, State oldState, 
-               State newState) -> {
-                   if (newState == State.SUCCEEDED) {
-                       JSObject win
-                               = (JSObject) webEngine.executeScript("window");
-                       win.setMember("app", new JavaApp());
-                   }
-       });
- 	  
-       
-	    mapView.setCenter(webView);
-	    reloadVehicleBoxes();
+		
+	    // process page loading
+	   webEngine.getLoadWorker().stateProperty().addListener(
+	       (ObservableValue<? extends State> ov, State oldState, 
+	           State newState) -> {
+	               if (newState == State.SUCCEEDED) {
+	                   JSObject win
+	                           = (JSObject) webEngine.executeScript("window");
+	                   win.setMember("app", new JavaApp());
+	               }
+	   });		  
+	   
+	   mapView.setCenter(webView);
 	}
 	/**
 	 *  Handles new vehicle position on main thread.

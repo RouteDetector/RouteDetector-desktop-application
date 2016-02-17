@@ -31,6 +31,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -220,6 +222,16 @@ public class LoginController {
 	    grid.add(pw, 0, 3);
 
 	    pwBox = new PasswordField();
+	    
+	    pwBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
+	        @Override
+	        public void handle(KeyEvent keyEvent) {
+	            if (keyEvent.getCode() == KeyCode.ENTER)  {
+	            	tryLogin();
+	            }
+	        }
+	    });
+	    
 	    grid.add(pwBox, 1, 3);
 	    Button btn = new Button("Login");
 	    HBox hbBtn = new HBox(10);
