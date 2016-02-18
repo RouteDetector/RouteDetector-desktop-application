@@ -1,5 +1,6 @@
 package com.routedetector.View;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,6 +15,7 @@ import javax.security.auth.login.LoginException;
 import com.routedetector.Basic.SecurityLoginInterface;
 import com.routedetector.Basic.SecurityServerInterface;
 import com.routedetector.Client.SocketContainer;
+import com.routedetector.Client.StageStarter;
 import com.routedetector.Client.StaticJobs;
 import com.routedetector.Client.StatusBar;
 import com.routedetector.Client.LoginInfo;
@@ -49,6 +51,7 @@ import javafx.stage.WindowEvent;
  *
  */
 public class LoginController {
+	private StageStarter stageStarter;
 	
 	private RmiContainer rmiContainer;
 	private SocketContainer socketContainer;
@@ -86,13 +89,13 @@ public class LoginController {
 	    	  	    	loginInfo.setUser(userTextField.getText());
 	    	  	    	loginInfo.setEmail(organizationTextField.getText());
 	    	  	    	loginInfo.setPassword(pwBox.getText().toCharArray());
-	    			    saveProperties();
-	    			    updateProgress(0.3,1);
-	    				updateMessage("Succeede!");
-	    				updateProgress(0.4,1);
-	    				rmiContainer.setCommunicator(theServer);
+	    			    //saveProperties();
+	    			    updateProgress(0.4,1);
+	    				updateMessage("Starting socket!");
+	    		        socketContainer.startSocket();
 	    				updateProgress(0.5,1);
 	    				updateMessage("Retrieving vehicle's data...");
+	    				rmiContainer.setCommunicator(theServer);
 	    				rmiContainer.setVehicleInfo(null);
 	    				updateProgress(0.6,1);
 	    				updateMessage("Retrieving driver's data...");
@@ -152,8 +155,8 @@ public class LoginController {
     private void afterLogin(boolean success,String comment){
 		if(success){
 			isLogedIn=true;
-	        socketContainer.startSocket();
-			closeLogin();
+			showMainWindowOnRunLater();
+			
 		}else{
 			isLogedIn=false;
 			actiontarget.setFill(Color.FIREBRICK);
@@ -161,14 +164,24 @@ public class LoginController {
 		}
 		stopProgress();
     }
-    
+    private void showMainWindowOnRunLater(){
+    	  Platform.runLater(new Runnable() {
+              @Override
+              public void run() {
+          		try{
+          			stageStarter.initMainWindow();
+          			stageStarter.showMainWindow();
+          			closeLogin();
+        		} catch (IOException e) {
+        			StaticJobs.showExceptionAlert(e, loginStage);
+        		}
+              }
+          });
+
+    }
+
     private void closeLogin(){
-  	  Platform.runLater(new Runnable() {
-          @Override
-          public void run() {
-              loginStage.close();
-          }
-      });
+    	loginStage.close();
     }
     /**
      * Initializes login dialog.
@@ -179,7 +192,8 @@ public class LoginController {
      * @param loginInfo holds login information
      * @return returns true if login success
      */
-    public boolean showLogin(RmiContainer rmiContainer, SocketContainer socketContainer, SecurityLoginInterface loginObject, LoginInfo loginInfo){
+    public boolean showLogin(RmiContainer rmiContainer, SocketContainer socketContainer, SecurityLoginInterface loginObject, LoginInfo loginInfo, StageStarter stageStarter){
+    	this.stageStarter=stageStarter;
     	this.loginInfo=loginInfo;
     	this.rmiContainer=rmiContainer;
     	this.socketContainer=socketContainer;
@@ -288,13 +302,21 @@ public class LoginController {
     /**
      * Saves login info to properties file.
      */
-    private void saveProperties(){
+  /*  private void saveProperties(){
     	Properties prop;
     	try{
     		//InputStream in = new FileInputStream("D:/ostava/properties/login.properties");
     		//OutputStream os=new FileOutputStream("D:/ostava/properties/login.properties");
     		InputStream in = new FileInputStream("./properties/login.properties");
-    		OutputStream os=new FileOutputStream("./properties/login.properties");
+    		//OutputStream os=new FileOutputStream("./properties/login.properties");
+		    	
+    		String s=System.getProperty("user.dir");
+		    File f=new File(s+"/properties/login.properties");
+		    f.setWritable(true);
+		    	f.setExecutable(true);
+    		//File f=new File(getClass().getResource("/properties/login.properties").toString());
+    		//InputStream in= getClass().getClassLoader().getResourceAsStream("properties/login.properties");
+    		OutputStream os=new FileOutputStream(f);
 			try {
 			  	prop = new Properties();          		  	
 	  			
@@ -314,5 +336,5 @@ public class LoginController {
   			e.printStackTrace();
 			StaticJobs.showExceptionAlertOnRunLater(e,null);
   		}
-    }
+    }*/
 }

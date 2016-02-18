@@ -109,10 +109,11 @@ public class MapPaneController implements MapCanvas{
 	}
 
 	public void reloadMapCanvas(){
+		
 		webView = new WebView();
 		webEngine = webView.getEngine();
 	    //webEngine.load(getClass().getResource("/map_resources/googlemap.html").toString());
-	    
+	    	    
 		File f=new File("./map_resources/googlemap.html");
 		try {
 			webEngine.load(new URL("file:///" + f.getAbsolutePath()).toExternalForm());
@@ -121,6 +122,7 @@ public class MapPaneController implements MapCanvas{
 		}
 		
 	    // process page loading
+	    
 	   webEngine.getLoadWorker().stateProperty().addListener(
 	       (ObservableValue<? extends State> ov, State oldState, 
 	           State newState) -> {
@@ -238,6 +240,7 @@ public class MapPaneController implements MapCanvas{
 			removeVehicleFromMap(entry.getKey());	
 		}
 		removeLastVehiclePositions();
+		
 		rightPanel.getChildren().removeAll(vehicleBoxContainers.values());
 		vehicleBoxContainers.clear();
 		vehicleBoxControllers.clear();
@@ -247,14 +250,6 @@ public class MapPaneController implements MapCanvas{
 		for(Map.Entry<String,VehicleBoxController> entry:vehicleBoxControllers.entrySet()){
 			disableDeviceFromMapWithImei(entry.getKey());	
 		}
-	}
-	public void disableAllOnRunLater(){
-    	Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-            	disableAll();
-            }
-        });
 	}
 	/**
 	 * Creates new VehicleBox view and controller.
@@ -383,7 +378,9 @@ public class MapPaneController implements MapCanvas{
 	}
 	/**Removes all markers that represents last vehicle positions*/
 	public void removeLastVehiclePositions(){
+
 		webEngine.executeScript("removeLastVehiclePositions();");
+
 		webEngine.executeScript("hidePath();");
 		statusBar.setProgressText("Last vehicle postions removed from map.");
 	}

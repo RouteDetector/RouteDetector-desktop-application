@@ -145,6 +145,18 @@
 .warning:focused:hover{
 	-fx-background-color:yellow;
 }
+.cancel{
+    -fx-graphic: url('/resources/cancel.png');
+    -fx-opacity: 0.4;
+}
+.cancel:hover{
+	-fx-opacity: 1;
+	-fx-background-color:yellow;
+}
+.cancel:focused:hover{
+	-fx-opacity: 1;
+	-fx-background-color:yellow;
+}
 .transparent{
 	-fx-background-color:transparent;
 }

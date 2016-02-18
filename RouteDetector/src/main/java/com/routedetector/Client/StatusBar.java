@@ -56,10 +56,6 @@ public class StatusBar extends BorderPane{
 	* @param button Button added to the left
 	*/	
 	public void addLeft(Button button){
-		button.getStyleClass().add("picture-button");
-		button.setTooltip(new Tooltip("Socket connection closed!"));
-		button.getStyleClass().add("transparent");
-		button.getStyleClass().add("warning");
 		leftContainer.getChildren().add(button);
 	}
 	public void addRight(Node n){

@@ -13,15 +13,12 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 import com.routedetector.AssetsJPA.VehiclePosition;
-import com.routedetector.View.GprsDevicesOverviewController;
 import com.routedetector.View.MapCanvas;
 
-import javafx.scene.control.Button;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -44,14 +41,7 @@ import javafx.stage.Stage;
 public class SocketContainer {
 	/**Date format message sent by server.*/
 	private static String datePattern ="yyyy-MM-dd HH:mm:ss.SSSSSS";
-	
-	/**Reference to MapPaneController to set vehicle position on new message received from server.*/
-	private MapCanvas map;
-	/**Reference to Gprs devices overview container to reload observed gprs devices list.
-	 * 
-	 */
-	private GprsDevicesOverviewController gprsDevicesController;
-	
+		
 	/** Reference to service nested class instance.*/
 	private SocketService service;
 
@@ -74,12 +64,11 @@ public class SocketContainer {
 	/** Reference to initStage for setting Alert parent.*/
 	private Stage motherStage;
 	
-	/**Button object which is added in status bar on connection failure.*/
-    private Button buttonAlert = new Button();
-
+	/**Reference to MapPaneController to set vehicle position on new message received from server.*/
+	private MapCanvas map;
+	
     /**Method for setting list of gprs device imeis for which the positions should be received*/
     public void sendMessageToServer(){
-		map.removeAll();    
        	Thread thread=new Thread() {
             public void run() {
         		try {
@@ -94,10 +83,10 @@ public class SocketContainer {
         				setStatusOnRunLater("Updated list of gprs devices for which positions should be received.");
         				StaticJobs.showApplySucceededInformationOnRunLater(motherStage);
         			}else{
-        				setStatusOnRunLater("Socket output stream closed.");       				
+        				socketClosedAlert("Failed to update list of gprs devices for which positions should be received.",null);
         			}
         		} catch (IOException e) {
-        			setStatusOnRunLater("Failed to update list of gprs devices for which positions should be received.");
+    				socketClosedAlert("Failed to update list of gprs devices for which positions should be received.", null);
         			e.printStackTrace();
         		}
             }
@@ -106,6 +95,10 @@ public class SocketContainer {
         thread.start();
         	
     }
+    private void socketClosedAlert(String exception, Stage owner){
+    	setStatusOnRunLater(exception);
+    	StaticJobs.showWarningAlertOnRunLater("Alert!", "Socket closed!",exception, owner);
+}
 	/**Method for showing confirmation dialog for socket reconnection.*/
 	public void changeSocketConnection() {
         if (StaticJobs.showReconnectionConfirmationDialog(motherStage)){
@@ -179,29 +172,6 @@ public class SocketContainer {
 	*/
     private void setSocketConnection(boolean isConnected){
     	stateHolder.setConnected(isConnected);
-
-    	
-    	// If socket is connected, warning button is removed, if not, it is added to status bar.
-    	 //Also adds on click functionality to button.
-    	
-    	if(isConnected){
-    		if(statusBar.isOnLeft(buttonAlert)){
-    			statusBar.removeLeft(buttonAlert);
-    			statusBar.setProgressText("Socket connected.");
-    		}
-    	}else{
-    		if(!statusBar.isOnLeft(buttonAlert)){
-    			buttonAlert.setOnAction(new EventHandler<ActionEvent>() {
-	    	        public void handle(ActionEvent e) {
-	    	        	changeSocketConnection();
-	    	        }
-	    	    });
-	    		statusBar.addLeft(buttonAlert);
-    			statusBar.setProgressText("Socket disconnected.");
-    			
-	    		StaticJobs.addBlinkingAnimation(buttonAlert);
-	    	}	    	    		
-    	}
     }
     private void setSocketConnectionOnRunLater(boolean isConnected){
 		Platform.runLater(new Runnable() {
@@ -271,12 +241,7 @@ public class SocketContainer {
 	public void setConnectionStateHolder(ConnectionStateHolder stateHolder) {
 		this.stateHolder = stateHolder;
 	}
-	public GprsDevicesOverviewController getGprsDevicesController() {
-		return gprsDevicesController;
-	}
-	public void setGprsDevicesController(GprsDevicesOverviewController gprsDevicesController) {
-		this.gprsDevicesController = gprsDevicesController;
-	}
+	
 	/**
 	* Nested class that extends Service java thread safe class. 
 	* It opens ssl socket connection to RouteDetector server and calls setSocketConnection method to 
@@ -302,7 +267,6 @@ public class SocketContainer {
     					ois = new ObjectInputStream(is);
     					oos=new ObjectOutputStream(os);
     					
-    					map.removeAllOnRunLater();
     					try{
     						
     						oos.writeObject(stateHolder.getLoginInfo());
@@ -329,9 +293,6 @@ public class SocketContainer {
     				}
     				finally{
 						setSocketConnectionOnRunLater(false);
-						map.disableAllOnRunLater();
-						gprsDevicesController.reloadTableOnRunLater();
-    					stateHolder.getObservedGprsDevicesImeiList().clear();
     					try{
     						if(sslSocket.isConnected())
     							sslSocket.close();

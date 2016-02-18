@@ -99,6 +99,32 @@ public class StaticJobs {
 	    alertTwo.showAndWait();
     }
 	/**
+	 *Showing alert when object could not be saved, updated or removed via Rmi.
+	 * 
+	 * @param  exception is String exception message.
+	 * @param  owner is the parent Stage.
+	 */
+    public static void showWarningAlert(String title, String header, String exception, Stage owner){
+	    Alert alertTwo = new Alert(AlertType.WARNING);
+    	try{
+    		alertTwo.initOwner(owner);
+    	}catch(Exception e){
+    	}
+	    alertTwo.setTitle(title);
+	    alertTwo.setHeaderText(header);
+	    alertTwo.setContentText(exception);
+	    alertTwo.showAndWait();
+    }
+
+	public static void showWarningAlertOnRunLater(String title, String header, String exception, Stage owner){
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() { 
+				showWarningAlert(title, header, exception, owner);
+			}
+		});
+	}
+	/**
 	 *Showing alert when object is not selected.
 	 * 
 	 * @param  exception is String exception message.

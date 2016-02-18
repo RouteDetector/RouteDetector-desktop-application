@@ -1,27 +1,35 @@
 package com.routedetector.View;
 
-import java.awt.Desktop;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.Properties;
 
 import com.routedetector.Client.SocketContainer;
 import com.routedetector.Client.StaticJobs;
 import com.routedetector.Client.StatusBar;
+import com.routedetector.Client.ConnectionStateHolder;
 import com.routedetector.Client.RmiContainer;
 
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 /**
@@ -50,25 +58,25 @@ public class MainContainerController {
 	@FXML
     private MenuItem connectedItem;
 
-	/**
-	 * Enables/disables menu item and changes its text.
+	/**Reference to MapPaneController to set vehicle position on new message received from server.*/
+	private MapCanvas mapCanvas;
+	/**Reference to Gprs devices overview container to reload observed gprs devices list.
 	 * 
-	 * @param isConnected true if item should be enabled
 	 */
-	public void setConnectedItemValue(boolean isConnected) {
-		connectedItem.setDisable(isConnected);
-		
-		if(isConnected)
-			connectedItem.setText("Connected");
-		else
-			connectedItem.setText("Connect...");
-	}
+	private GprsDevicesOverviewController gprsDevicesController;
+
+	/**Button object which is added in status bar on connection failure.*/
+    private Button buttonAlert = new Button();
+
+	/**Reference to Main class, used to enable/disable menu item for connection management.*/
+	private ConnectionStateHolder stateHolder;
+	
+	private RmiContainer rmiContainer;
 	/**
 	 * References to other controllers
 	 */
 	private VehicleOverviewController vehicleOverviewController;
 	private DriverOverviewController driverOverviewController;
-	private MapPaneController mapPaneController;
 	private GprsDevicesOverviewController gprsDevicesOverviewController;
 	
 	public GprsDevicesOverviewController getGprsDevicesOverviewController() {
@@ -131,6 +139,7 @@ public class MainContainerController {
 	public void setStatisticsTab(Tab statisticsTab) {
 		this.statisticsTab = statisticsTab;
 	}
+	
 	public Tab getGprsTab() {
 		return gprsTab;
 	}
@@ -146,9 +155,33 @@ public class MainContainerController {
 	public void setDriverTab(Tab driverTab) {
 		this.driverTab = driverTab;
 	}
-	
-	private RmiContainer rmiContainer;
-	
+	public MapCanvas getMapCanvas() {
+		return mapCanvas;
+	}
+
+	public void setMapCanvas(MapCanvas mapCanvas) {
+		this.mapCanvas = mapCanvas;
+	}
+
+	public GprsDevicesOverviewController getGprsDevicesController() {
+		return gprsDevicesController;
+	}
+
+	public void setGprsDevicesController(GprsDevicesOverviewController gprsDevicesController) {
+		this.gprsDevicesController = gprsDevicesController;
+	}
+
+	public ConnectionStateHolder getStateHolder() {
+		return stateHolder;
+	}
+
+	public void setStateHolder(ConnectionStateHolder stateHolder) {
+		this.stateHolder = stateHolder;
+	}
+
+	public StatusBar getStatusBar() {
+		return statusBar;
+	}
     public Tab getVehicleTab() {
 		return vehicleTab;
 	}
@@ -156,12 +189,9 @@ public class MainContainerController {
 	public void setVehicleTab(Tab vehicleTab) {
 		this.vehicleTab = vehicleTab;
 	}
+	
     public MainContainerController(){
     }
-	
-	@FXML
-    private void initialize() {
-	}
 
 	public RmiContainer getRmiContainer() {
 		return rmiContainer;
@@ -170,8 +200,21 @@ public class MainContainerController {
 	public void setRmiContainer(RmiContainer rmiContainer) {
 		this.rmiContainer = rmiContainer;
 	}
-	public void showWindow(){
-		
+
+	public Stage getMotherStage() {
+		return motherStage;
+	}
+
+	public void setMotherStage(Stage motherStage) {
+		this.motherStage = motherStage;
+	}
+	
+    public SocketContainer getSocketContainer() {
+		return socketContainer;
+	}
+
+	public void setSocketContainer(SocketContainer socketContainer) {
+		this.socketContainer = socketContainer;
 	}
 	public void setStatusBar(StatusBar statusBar) {
 		this.statusBar=statusBar;
@@ -205,13 +248,48 @@ public class MainContainerController {
 		gprsDevicesOverviewController.handleNewGprs();
 
 	}
+	@FXML
+    private void initialize() {
+		buttonAlert.setTooltip(new Tooltip("Socket connection closed!"));
+		buttonAlert.getStyleClass().add("picture-button");
+		buttonAlert.getStyleClass().add("transparent");
+		buttonAlert.getStyleClass().add("warning");
+		buttonAlert.setOnAction(new EventHandler<ActionEvent>() {
+	        public void handle(ActionEvent e) {
+	        	socketContainer.changeSocketConnection();
+	        }
+	    });
+	}
 	/**
 	 * Initializes and starts service object.
 	 */
 	@FXML
     private void openSite() {
-		statusBar.setProgressText("Opening web browser...");
-		WebPageService service=new WebPageService();
+		final WebView webView = new WebView();
+        final WebEngine webEngine = webView.getEngine();
+        webEngine.load("http://www.routedetector.com");
+
+		Tab help=new Tab();
+        HBox h=new HBox();
+        h.setSpacing(10);
+        Label label=new Label("Help");
+        Button cancel=new Button();
+        h.getChildren().add(label);
+        h.getChildren().add(cancel);
+		cancel.getStyleClass().add("picture-button");
+		cancel.getStyleClass().add("transparent");
+		cancel.getStyleClass().add("cancel");
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+	        public void handle(ActionEvent e) {
+	        	tabs.getTabs().remove(help);
+	        }
+	    });
+        
+		help.setGraphic(h);
+		help.setContent(webView);
+		tabs.getTabs().add(help);
+		statusBar.setProgressText("Opened help tab.");
+		/*WebPageService service=new WebPageService();
 		service.setOnCancelled(new EventHandler<WorkerStateEvent>() {
 		      @Override
 		      public void handle(WorkerStateEvent workerStateEvent) {
@@ -224,35 +302,13 @@ public class MainContainerController {
 					}
 		      }
 		  });
-		service.start();
+		service.start();*/
 	}
 	@FXML
     private void connect() {
 		socketContainer.changeSocketConnection();
 	}
-
-	public Stage getMotherStage() {
-		return motherStage;
-	}
-
-	public void setMotherStage(Stage motherStage) {
-		this.motherStage = motherStage;
-	}
 	
-    public SocketContainer getSocketContainer() {
-		return socketContainer;
-	}
-
-	public void setSocketContainer(SocketContainer socketContainer) {
-		this.socketContainer = socketContainer;
-	}
-	public MapPaneController getMapPaneController() {
-		return mapPaneController;
-	}
-
-	public void setMapPaneController(MapPaneController mapPaneController) {
-		this.mapPaneController = mapPaneController;
-	}
     private void showProgressRunLater(String message) {
     	Platform.runLater(new Runnable() {
             @Override
@@ -261,6 +317,39 @@ public class MainContainerController {
             }
         });
     }
+
+	/**
+	 * Enables/disables menu item and changes its text.
+	 * 
+	 * @param isConnected true if item should be enabled
+	 */
+	public void setConnected(boolean isConnected) {
+		connectedItem.setDisable(isConnected);
+			
+    	// If socket is connected, warning button is removed, if not, it is added to status bar.
+   	 //Also adds on click functionality to button.
+   	
+	   	if(isConnected){
+	   		connectedItem.setText("Connected");
+	   		if(statusBar.isOnLeft(buttonAlert)){
+	   			statusBar.removeLeft(buttonAlert);
+	   			statusBar.setProgressText("Socket connected.");
+	   		}
+	   	}else{
+	   		connectedItem.setText("Connect...");
+				if(mapCanvas!=null) mapCanvas.disableAll();
+				if(gprsDevicesController!=null) gprsDevicesController.reloadTable();
+				stateHolder.getObservedGprsDevicesImeiList().clear();
+				
+	   		if(!statusBar.isOnLeft(buttonAlert)){
+		    	statusBar.addLeft(buttonAlert);
+	   			statusBar.setProgressText("Socket disconnected.");
+	   			
+		    		StaticJobs.addBlinkingAnimation(buttonAlert);
+		    	}	    	    		
+	   	}
+	}
+
 	/**
      * Loads web-site URL from properties file and opens it in default browser.
      *
@@ -279,10 +368,45 @@ public class MainContainerController {
             	    	in.close();
             	    	String webSite=prop.getProperty("web_site");
             			prop.clear();
+            			
+            			Stage stage=new Stage();
+            	        /*final WebView webView = new WebView();
+            	        final WebEngine webEngine = webView.getEngine();
+            	        webEngine.load("http://www.google.com");
+            	        */
+            	        stage.setTitle("Simple browser");
+            	        Scene scene = new Scene(new BorderPane()
+            	        		
+            	        		,1000,700, Color.web("#666970"));
+            	        stage.setScene(scene);
+
+            	        stage.show();
+            			/*
+            			String os = System.getProperty("os.name").toLowerCase();
+            			
+            			if(os.indexOf( "win" ) >= 0){
+            				Runtime rt = Runtime.getRuntime();
+            				rt.exec( "rundll32 url.dll,FileProtocolHandler " + webSite);
+            			}else if(os.indexOf( "mac" ) >= 0){
+            				Runtime rt = Runtime.getRuntime();
+            				rt.exec( "open" + webSite);
+            			}else if(os.indexOf( "nix") >=0 || os.indexOf( "nux") >=0){
+            				Runtime rt = Runtime.getRuntime();
+            				String[] browsers = {"epiphany", "firefox", "mozilla", "konqueror",
+            				                                 "netscape","opera","links","lynx"};
+
+            				StringBuffer cmd = new StringBuffer();
+            				for (int i=0; i<browsers.length; i++)
+            				     cmd.append( (i==0  ? "" : " || " ) + browsers[i] +" \"" + webSite + "\" ");
+
+            				rt.exec(new String[] { "sh", "-c", cmd.toString() });
+            			}*/
+            			/*
             			if(Desktop.isDesktopSupported())
             			{
             			  Desktop.getDesktop().browse(new URI(webSite));
             			}
+            			*/
                 		showProgressRunLater("Browser opened.");
             		}catch (IOException e) {
             			StaticJobs.showExceptionAlertOnRunLater(e,motherStage);

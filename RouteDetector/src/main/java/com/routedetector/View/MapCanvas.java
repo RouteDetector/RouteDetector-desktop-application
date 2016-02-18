@@ -20,5 +20,5 @@ public interface MapCanvas {
 	public void disableDeviceFromMapWithImeiOnRunLater(String imei);
 	public void removeAllOnRunLater();
 	public void removeAll();
-	public void disableAllOnRunLater();
+	public void disableAll();
 }

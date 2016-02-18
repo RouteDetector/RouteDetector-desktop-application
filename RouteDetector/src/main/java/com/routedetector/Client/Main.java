@@ -24,16 +24,20 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilePermission;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Properties;
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
+import javax.swing.JOptionPane;
 
 import com.routedetector.Basic.SecurityLoginInterface;
 import com.routedetector.View.DriverOverviewController;
@@ -44,6 +48,8 @@ import com.routedetector.View.MapPaneController;
 import com.routedetector.View.StatisticsOverviewController;
 import com.routedetector.View.VehicleOverviewController;
 
+import java.util.prefs.*;
+
 /**
  * This class is the Main class of the application.
  * It opens splash screen, opens Service which handles loading properties, and makes secure
@@ -53,10 +59,12 @@ import com.routedetector.View.VehicleOverviewController;
  * 
  * @author  Danijel Sudimac
 */
-public class Main extends Application implements ConnectionStateHolder{
+public class Main extends Application implements ConnectionStateHolder, StageStarter{
 	/** References to stages.*/
-	private Stage initStage;
+	private Stage mainStage;
 	private Stage splashStage;
+	
+	private Preferences prefs;
 	
 	/** Holds information of socket connection status.*/
 	private boolean isConnected;
@@ -98,7 +106,8 @@ public class Main extends Application implements ConnectionStateHolder{
 	private ObservableList<String> observedGprsDevicesImeiList= FXCollections.observableArrayList();
 	
 	private Task<Void> navigationTask;
-
+	private ConnectService service;
+	    
 	public static void main(String[] args) throws Exception { launch(args); }
 	
 	/**
@@ -108,16 +117,26 @@ public class Main extends Application implements ConnectionStateHolder{
 	 */
 	@Override 
 	public void start(final Stage initStage) throws Exception {
-		//Saves reference to initStage
-		this.initStage=initStage;
 		
-		//Creates instances of classes that handles Rmi and Socket connections
-		this.rmiContainer= new RmiContainer();
-		this.socketContainer=new SocketContainer();
- 
+		prefs = Preferences.userNodeForPackage(this.getClass());
+		
+		//Saves reference to initStage
+		mainStage=initStage;
+	
+		//Shows splash
+		showSplash();
+
+	   //Stops service if splash screen gets closed.
+		splashStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				if(service !=null && service.isRunning())
+					service.cancel();
+			}
+		});
 		
 		//Creates service that loads properties and establish connection to Rmi server
-		ConnectService service=new ConnectService();
+		service=new ConnectService();
 		service.setOnCancelled(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent workerStateEvent) {
@@ -130,62 +149,44 @@ public class Main extends Application implements ConnectionStateHolder{
 			}
 		});
 		service.start();
-		
-		//Initialize initStage
-		try{
-			initMainWindow();
-		} catch (IOException e) {
-			StaticJobs.showExceptionAlert(e, splashStage);
-		}
-		
-		//Shows splash
-		showSplash();
 
-	   //Stops service if splash screen gets closed.
-		splashStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			@Override
-			public void handle(WindowEvent event) {
-				service.cancel();
-			}
-		});
 	 }
 	/** Method for calling LoginController which opens login stage.
 	 * showLogin method returns true if login attempt succeeds. In that case application proceed to 
 	 * another stage. If login stage is closed with no user signed in, initStage is closed and
 	 * application ends.*/
 	private void showLoginStage() {
-	    socketContainer.setConnectionStateHolder(this);
-		if(new LoginController().showLogin(rmiContainer, socketContainer, loginObject, loginInfo)){
-
-			 showMainWindow();
+		if(new LoginController().showLogin(rmiContainer, socketContainer, loginObject, loginInfo, this)){
+			prefs.put("ROUTEDETECTOR_USER", loginInfo.getUser());
+			prefs.put("ROUTEDETECTOR_COMP_EMAIL", loginInfo.getEmail());
 		}else{
-			initStage.close();
+			mainStage.close();
 		}	
 	}
-	private void showMainWindow(){
-		this.driverOverviewController.reloadTableOnRunLater();
-		this.vehicleOverviewController.reloadTableOnRunLater();
-		this.gprsDevicesController.reloadTableOnRunLater();
-		this.mapPaneController.reloadMapCanvas();
-		initStage.show();
+	public void showMainWindow(){
+		//this.driverOverviewController.reloadTableOnRunLater();
+		//this.vehicleOverviewController.reloadTableOnRunLater();
+		//this.gprsDevicesController.reloadTableOnRunLater();
+		//this.mapPaneController.reloadMapCanvas();
+		mainStage.show();
 	}
 	/** Method for initializing initStage after successful sign in.
 	 * The scene that is set to initStage holds MainContainer (BorderPane) in it.
 	 * MainContainer holds TabPane and DriverOverview, VehicleOverview, GprsOverview, Statistics and MapPane are placed in separate tabs.
 	 */
-	private void initMainWindow() throws IOException{
+	public void initMainWindow() throws IOException{
 		//Adds icon to stage
-		initStage.getIcons().add(new Image("/resources/logo_image.png"));   
+		mainStage.getIcons().add(new Image("/resources/logo_image.png"));   
 		
 		//Handling socket closing on application end.
-		initStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
 				socketContainer.disconnectSocket();
 			}
 		});
-	    initStage.setTitle("RouteDetector");
-	    initStage.getIcons().add(new Image("/resources/logo_image.png"));
+	    mainStage.setTitle("RouteDetector");
+	    mainStage.getIcons().add(new Image("/resources/logo_image.png"));
 	    
 	    //Create status bar
 	    StatusBar statusBar=new StatusBar();
@@ -198,7 +199,7 @@ public class Main extends Application implements ConnectionStateHolder{
 	    BorderPane vehiclePane = (BorderPane) newLoader.load();       
 	    vehicleOverviewController = newLoader.getController();
 	    vehicleOverviewController.setRmiContainer(rmiContainer);
-	    vehicleOverviewController.setMotherWindow(initStage);
+	    vehicleOverviewController.setMotherWindow(mainStage);
 	    vehicleOverviewController.setStatusBar(statusBar);
 	    
 	    //Loading Driver overview
@@ -207,7 +208,7 @@ public class Main extends Application implements ConnectionStateHolder{
 	    BorderPane driverPane = (BorderPane) secondLoader.load();
 	    driverOverviewController = secondLoader.getController();
 	    driverOverviewController.setRmiContainer(rmiContainer);
-	    driverOverviewController.setMotherWindow(initStage);
+	    driverOverviewController.setMotherWindow(mainStage);
 	    driverOverviewController.setStatusBar(statusBar);
 	    
 	    //Loading Map Overview
@@ -216,7 +217,7 @@ public class Main extends Application implements ConnectionStateHolder{
 	    BorderPane mapPane = (BorderPane) thirdLoader.load();
 	    mapPaneController = thirdLoader.getController();
 	    mapPaneController.setRmiContainer(rmiContainer);    
-	    mapPaneController.setMotherWindow(initStage);
+	    mapPaneController.setMotherWindow(mainStage);
 	    mapPaneController.setStatusBar(statusBar);
 	    
 	    //Loading GprsDevices Overview
@@ -226,7 +227,7 @@ public class Main extends Application implements ConnectionStateHolder{
 
 	    gprsDevicesController = fourthLoader.getController();
 	    gprsDevicesController.setRmiContainer(rmiContainer);
-	    gprsDevicesController.setMotherWindow(initStage);   
+	    gprsDevicesController.setMotherWindow(mainStage);   
 	    gprsDevicesController.setStatusBar(statusBar);
 	    gprsDevicesController.setSocketContainer(socketContainer);
 	    gprsDevicesController.setConnectionStateHolder(this);
@@ -237,7 +238,7 @@ public class Main extends Application implements ConnectionStateHolder{
 	    BorderPane statisticsPane = (BorderPane) fifthLoader.load();
 	    StatisticsOverviewController statisticsController = fifthLoader.getController();
 	    statisticsController.setRmiContainer(rmiContainer);
-	    statisticsController.setMotherWindow(initStage);   
+	    statisticsController.setMotherWindow(mainStage);   
 	    statisticsController.setStatusBar(statusBar);
 	    statisticsController.loadStatisticsView();
 	    
@@ -253,8 +254,11 @@ public class Main extends Application implements ConnectionStateHolder{
 	    mainContainerController.getGprsTab().setContent(gprsPane);
 	    mainContainerController.getStatisticsTab().setContent(statisticsPane);
 		mainContainerController.setRmiContainer(rmiContainer);
-		mainContainerController.setMotherStage(initStage);
+		mainContainerController.setMotherStage(mainStage);
 	    mainContainerController.setSocketContainer(socketContainer);
+	    this.mainContainerController.setMapCanvas(mapPaneController);
+	    this.mainContainerController.setStateHolder(this);
+	    
 	    //Add overviews to MainContainerController for menu-view connection
 	    mainContainerController.setDriverOverviewController(driverOverviewController);
 	    mainContainerController.setVehicleOverviewController(vehicleOverviewController);
@@ -267,7 +271,7 @@ public class Main extends Application implements ConnectionStateHolder{
 				public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
 					if(oldValue==mainContainerController.getGprsTab())
 						if(gprsDevicesController.areChangesMade())
-							if(StaticJobs.showApplyConfirmationDialog(initStage))
+							if(StaticJobs.showApplyConfirmationDialog(mainStage))
 								gprsDevicesController.applyChanges();
 							
 					if(newValue==mainContainerController.getVehicleTab()){
@@ -324,18 +328,18 @@ public class Main extends Application implements ConnectionStateHolder{
 		    }
 		);
 	    //Set containers
-	    socketContainer.setMotherStage(initStage);
+	    socketContainer.setMotherStage(mainStage);
 	    socketContainer.setStatusBar(statusBar);
 	    socketContainer.setMapCanvas(mapPaneController);
-	    socketContainer.setGprsDevicesController(gprsDevicesController);
 	    rmiContainer.setDriverTab(mainContainerController.getDriverTab());
 	    rmiContainer.setVehicleTab(mainContainerController.getVehicleTab());
 	    rmiContainer.setGprsTab(mainContainerController.getGprsTab());
 	
 	    Scene scene = new Scene(mainContainerPane);
 		mainContainerPane.getStylesheets().add("/resources/style.css");
-	    initStage.setScene(scene);
+	    mainStage.setScene(scene);
 	
+	    setConnected(isConnected);
 	}
 	/** Method for setting and showing splash stage.
 	 * Sets on-close action to cancel the service if user closes the splash screen.
@@ -395,6 +399,12 @@ public class Main extends Application implements ConnectionStateHolder{
 				/** {@inheritDoc}*/
 				@Override
 				protected Void call() throws Exception {
+
+					//Creates instances of classes that handles Rmi and Socket connections
+					rmiContainer= new RmiContainer();
+					socketContainer=new SocketContainer();
+				    socketContainer.setConnectionStateHolder(Main.this);
+				    
 					try{
 						try {
 							//Loads the properties
@@ -410,11 +420,16 @@ public class Main extends Application implements ConnectionStateHolder{
 	  			    		prop.clear();
 	
 	  			          	//in = new FileInputStream("D:/ostava/properties/login.properties");
-	  			    		in = new FileInputStream("./properties/login.properties");
-	  			          	prop.load(in);
-	  			          	in.close();
-	  			          	loginInfo=new LoginInfo(prop.getProperty("user"), prop.getProperty("comp"),null);
-	  			    		prop.clear();
+	  			    		//in = new FileInputStream("./properties/login.properties");
+	  			    		
+	  			    		//in = getClass().getClassLoader().getResourceAsStream("properties/login.properties");
+	  			          	
+	  			    		//prop.load(in);
+	  			          	//in.close();
+	  			          	//loginInfo=new LoginInfo(prop.getProperty("user"), prop.getProperty("comp"),null);
+	  			    		//prop.clear();
+	  			    		loginInfo=new LoginInfo(prefs.get("ROUTEDETECTOR_USER", ""), prefs.get("ROUTEDETECTOR_COMP_EMAIL", ""),null);
+	  			    		
 	  			    		
 	  			    		in = getClass().getClassLoader().getResourceAsStream("properties/rmi.properties");
 	  			    		
@@ -427,7 +442,10 @@ public class Main extends Application implements ConnectionStateHolder{
 	  			    	    //System.setProperty("javax.net.ssl.keyStore","D:/ostava/properties/keystore");
 	  			      	    //System.setProperty("javax.net.ssl.trustStore","D:/ostava/properties/cacerts");
 	  			    	    //System.setProperty("java.security.policy", "D:/ostava/properties/security.properties");
-	
+
+		  			    	
+		  			    	//FilePermission filePermission = new FilePermission(f.getAbsolutePath(), "read,write,delete");
+		  			    	
 	  			    	    System.setProperty("javax.net.ssl.keyStore","./properties/keystore");
 	  			      	    System.setProperty("javax.net.ssl.trustStore", "./properties/cacerts");
 	  			    	    //System.setProperty("java.security.policy", "./properties/security.properties");
@@ -437,9 +455,9 @@ public class Main extends Application implements ConnectionStateHolder{
 	  			    	    prop=null;
 						}catch (IOException e) {
 							e.printStackTrace();
-							StaticJobs.showExceptionAlertOnRunLater(e, initStage);
+							StaticJobs.showExceptionAlertOnRunLater(e, mainStage);
 							hideSplashRunLater();
-							initStage.close();
+							mainStage.close();
 							return null;
 						}finally {
 							if (in != null) {
@@ -447,9 +465,9 @@ public class Main extends Application implements ConnectionStateHolder{
 									in.close();
 								} catch (IOException e) {
 									e.printStackTrace();
-									StaticJobs.showExceptionAlertOnRunLater(e, initStage);
+									StaticJobs.showExceptionAlertOnRunLater(e, mainStage);
 									hideSplashRunLater();
-									initStage.close();
+									mainStage.close();
 									return null;
 								}
 							}
@@ -461,14 +479,14 @@ public class Main extends Application implements ConnectionStateHolder{
 						showLoginStageRunLater();
 	  				}catch(RemoteException e) {
 						e.printStackTrace();
-						StaticJobs.showExceptionAlertOnRunLater(e, initStage);
+						StaticJobs.showExceptionAlertOnRunLater(e, mainStage);
 	  					hideSplashRunLater();
-	  			    	initStage.close();	
+	  			    	mainStage.close();	
 	  				} catch (NotBoundException e1) {
 						e1.printStackTrace();
-						StaticJobs.showExceptionAlertOnRunLater(e1, initStage);
+						StaticJobs.showExceptionAlertOnRunLater(e1, mainStage);
 	  					hideSplashRunLater();
-	  			    	initStage.close();
+	  			    	mainStage.close();
 	  				}
 	  				return null;
 	  			}
@@ -499,7 +517,7 @@ public class Main extends Application implements ConnectionStateHolder{
 	@Override
 	public void setConnected(boolean isConnected) {
 		this.isConnected=isConnected;
-		mainContainerController.setConnectedItemValue(isConnected);
+		if(mainContainerController!=null) mainContainerController.setConnected(isConnected);
 	}
 
 	@Override
