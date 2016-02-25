@@ -361,7 +361,8 @@ public class GprsDevicesOverviewController {
      * puts them back to force TableView refreshing. 
      */
 	public void reloadTable(){
-        listOfAddedGprsDevices.setItems(stateHolder.getObservedGprsDevicesImeiList());
+		this.listOfAddedGprsDevices.getItems().clear();
+		this.listOfAddedGprsDevices.getItems().addAll(stateHolder.getObservedGprsDevicesImeiList());
         
     	rmiContainer.setGprsDevicesInfo(motherStage);
     	tableSetItems();
